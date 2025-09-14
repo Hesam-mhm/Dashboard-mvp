@@ -1,0 +1,50 @@
+import { AutomationMissionWorkflowStateType } from './General.type';
+
+export type DailyMissionType = {
+  id?: string;
+  name?: string;
+  owner?: string;
+  idx?: number;
+  index?: number;
+  creation?: string;
+  modified?: string;
+  modified_by?: string;
+  docstatus?: 0;
+  parent?: string;
+  parentfield?: string;
+  parenttype?: string;
+  doctype?: string;
+  workflow_state?: AutomationMissionWorkflowStateType;
+  // ------------------------------------------------------------
+  assigned_unit_roles?: string;
+  agent_employees_id?: string;
+  agent_personnel_name?: string;
+  agent_personnel_code?: string;
+  agent_organizational_position?: string;
+  agent_organizational_unit?: string;
+  agent_accompanying_items?: string;
+  companion_description?: string;
+  vehicle_type?: 'وسیله شرکت' | 'وسیله شخصی' | 'سایر';
+  accommodation_type?: 'هتل' | 'سایر';
+  vehicle_name?: string;
+  vehicle_province_number?: string;
+  vehicle_three_digit_number?: string;
+  vehicle_persian_letters?: string;
+  vehicle_two_digit_number?: string;
+  reject_mission_description_by_administrative_unit?: string;
+  reject_mission_description_by_unit_manager?: string;
+  reject_mission_description_by_factory_manager?: string;
+
+  mission_start_date?: string;
+  mission_end_date?: string;
+  mission_duration?: string;
+  mission_location?: string;
+  mission_description?: string;
+  mission_start_date_editable?: string;
+  mission_end_date_editable?: string;
+  mission_duration_editable?: string;
+  mission_location_editable?: string;
+  mission_description_editable?: string;
+  modify_date?: string;
+  mission_is_edited?: boolean;
+};
