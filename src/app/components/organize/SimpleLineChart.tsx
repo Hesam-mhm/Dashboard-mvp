@@ -11,6 +11,7 @@ interface SimpleLineChartProps {
   options?: Partial<ApexOptions>;
   height?: number | string;
   width?: number | string;
+  
 }
 
 const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, xAxisTitle, yAxisTitle, options: customOptions, height = 400, width = '100%' }) => {
@@ -20,20 +21,21 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, xAxisTitle, yAx
     const { getChartOptions } = useChartContext();
     contextOptions = getChartOptions('line', {
       chart: { height, width },
+      legend: { show: true },
       title: { text: xAxisTitle || '', align: 'center' },
-      xaxis: { type: 'datetime', labels: { rotate: -45 } },
+      xaxis: { type: 'datetime', labels: { rotate: -45 } , position: 'bottom'},
       yaxis: [
         {
           title: { text: yAxisTitle || '' },
-          labels: { formatter: (val: number) => val.toFixed(2) },
+          // labels: { formatter: (val: number) => val.toFixed(2) },
         },
       ],
       stroke: { curve: 'smooth', width: 2 },
-      dataLabels: {
-        enabled: true,
-        enabledOnSeries: [0, 1],
-        formatter: (val: number) => val + '%',
-      },
+      // dataLabels: {
+      //   enabled: false,
+      //   enabledOnSeries: [0, 1],
+      //   formatter: (val: number) => val + '%',
+      // },
     });
   } catch {
     // Fallback to default options if context is not available

@@ -13,11 +13,12 @@ import {
   Logout as LogoutIcon,
   ArrowBack as BackIcon,
 } from '@mui/icons-material';
+import { SolarGraphBoldDuotone } from '../Iconify/SolarGraphBoldDuotone';
 
 export type SidebarItem = {
   title: string;
   to: string;
-  outLinedIcon?: React.ReactElement;
+  Icon?: React.ReactElement;
   boldIcon?: React.ReactElement;
   hasBullet?: boolean;
   roles?: string[];
@@ -26,7 +27,7 @@ export type SidebarItem = {
 export type SidebarGroup = {
   title: string;
   to: string;
-  icon: React.ReactElement;
+  Icon: React.ReactElement;
   roles?: string[];
   children: SidebarItem[];
   activeRoutes?: string[];
@@ -36,23 +37,17 @@ export type SidebarEntry = SidebarItem | SidebarGroup;
 
 export const SidebarMapper: SidebarEntry[] = [
   {
-    title: 'پیشخوان',
+    title: 'داشبورد',
     to: RouteMapper.Home.path,
-    outLinedIcon: <DashboardIcon />,
-    boldIcon: <DashboardIcon />,
+    Icon: <SolarGraphBoldDuotone />,
+    boldIcon: <SolarGraphBoldDuotone />,
     roles: [Roles.SystemManager],
   },
-  {
-    title: 'بیلدر داشبورد',
-    to: RouteMapper.DashboardBuilder.path,
-    outLinedIcon: <DashboardIcon />,
-    boldIcon: <DashboardIcon />,
-    roles: [Roles.SystemManager],
-  },
+
   {
     title: 'نمودارها مثال',
     to: RouteMapper.ChartsExample.path,
-    outLinedIcon: <DashboardIcon />,
+    Icon: <DashboardIcon />,
     boldIcon: <DashboardIcon />,
     roles: [Roles.SystemManager],
   },

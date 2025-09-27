@@ -5,21 +5,20 @@ import { useLocation } from 'react-router';
 import { checkIsActive, WithChildren } from '../../../../helpers';
 import { useLayout } from '../../../core';
 import { Stack, Typography, useTheme } from '@mui/material';
-import { DotIcon } from '../../../../../app/Iconify/DotIcon';
 import React from 'react';
-import { COLORS } from '../../../../partials/layout/theme-mode/styled/constants';
+import { DotIcon } from '../../../../../app/Iconify/DotIcon';
 
 type Props = {
   to: string;
   title: string;
-  outLinedIcon?: ReactElement;
-  boldIcon?: ReactElement;
+  Icon?: ReactElement;
+  // boldIcon?: ReactElement;
   fontIcon?: string;
   hasBullet?: boolean;
   isSubMenuChild?: boolean;
 };
 
-const SidebarMenuItem: FC<Props & WithChildren> = ({ children, to, title, outLinedIcon, boldIcon, hasBullet = false, isSubMenuChild = false }) => {
+const SidebarMenuItem: FC<Props & WithChildren> = ({ children, to, title, Icon, hasBullet = false, isSubMenuChild = false }) => {
   const { pathname } = useLocation();
   const isActive = checkIsActive(pathname, to);
   const { config } = useLayout();
@@ -68,19 +67,11 @@ const SidebarMenuItem: FC<Props & WithChildren> = ({ children, to, title, outLin
             }}
           />
         )}
-        {isActive &&
-          boldIcon &&
-          React.cloneElement(boldIcon, {
+
+        {Icon &&
+          React.cloneElement(Icon, {
             style: {
-              color: theme.palette.primary.main,
-              fontSize: '20px',
-            },
-          })}
-        {!isActive &&
-          outLinedIcon &&
-          React.cloneElement(outLinedIcon, {
-            style: {
-              color: theme.palette.common.white,
+              color: isActive ? theme.palette.primary.main : theme.palette.common.white,
               fontSize: '20px',
             },
           })}

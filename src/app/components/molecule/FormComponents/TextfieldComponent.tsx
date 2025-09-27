@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, IconButton, InputAdornment, Stack, SxProps
 import { ChangeEvent, ReactNode } from 'react';
 import { Control, Controller, FieldErrors, FieldValues, Path } from 'react-hook-form';
 import get from 'lodash/get';
-import { DeleteIcon } from '../../../Iconify/DeleteIcon';
+import { SolarCloseCircleLineDuotone } from '../../../Iconify/SolarCloseCircleLineDuotone';
 
 const convertPersianToEnglish = (value: string) => {
   const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
@@ -180,7 +180,7 @@ const TextfieldComponent = <T extends FieldValues>({
                       ) : value && !readOnly && !disabled ? (
                         <InputAdornment position="end">
                           <IconButton onClick={() => onChange('')} edge="end">
-                            <DeleteIcon />
+                            <SolarCloseCircleLineDuotone />
                           </IconButton>
                         </InputAdornment>
                       ) : null}

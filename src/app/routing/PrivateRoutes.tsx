@@ -39,11 +39,14 @@ const PrivateRoutes = () => {
     <Routes>
       <Route element={<MasterLayout />}>
         {/* Home route */}
+        <Route path="auth/*" element={<Navigate to={RouteMapper.Home.path} />} />
+
+        {/* Home route */}
         <Route
           path={RouteMapper.Home.path}
           element={
             <Suspense fallback={<LoadingFallback />}>
-              <Home open={false} onClose={() => {}} />
+              <Home />
             </Suspense>
           }
         />

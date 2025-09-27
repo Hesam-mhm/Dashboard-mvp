@@ -9,7 +9,8 @@ export default defineConfig(({ mode }) => {
     base: '/',
     envPrefix: ['VITE_'],
     define: {
-      'import.meta.env.ç': JSON.stringify(env.VITE_MAIN_API_URL),
+      'import.meta.env.VITE_MAIN_API_URL': JSON.stringify(env.VITE_MAIN_API_URL),
+      'import.meta.env.VITE_CHART_API_URL': JSON.stringify(env.VITE_CHART_API_URL),
     },
     build: {
       chunkSizeWarningLimit: 3000,
@@ -18,14 +19,5 @@ export default defineConfig(({ mode }) => {
       include: ['@emotion/react', '@emotion/styled', '@mui/material/Tooltip'],
     },
     plugins: [react()],
-    server: {
-      proxy: {
-        '/api/': {
-          target: env.VITE_SERVER_API_URL,
-          changeOrigin: true,
-          rewrite: (path) => path.replace('^/erp', ''),
-        },
-      },
-    },
   };
 });

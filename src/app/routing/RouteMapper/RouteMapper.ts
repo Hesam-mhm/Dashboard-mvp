@@ -1,7 +1,7 @@
 export const RouteMapper = {
   Home: {
     path: '/Home',
-    title: 'خانه',
+    title: 'پیشخوان',
   },
 
   DashboardBuilder: {

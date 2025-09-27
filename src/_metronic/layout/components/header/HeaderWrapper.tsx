@@ -81,7 +81,7 @@ export function HeaderWrapper({ onMobileMenuToggle }: HeaderWrapperProps) {
         {/* Logo for mobile */}
         {isMobile && (
           <Link to="/Home" style={{ textDecoration: 'none', marginRight: 16 }}>
-            <img alt="Logo" src={toAbsoluteUrl('media/logos/Volleyball-Logomark.svg')} style={{ height: '32px' }} />
+            <img alt="Logo" src={toAbsoluteUrl('media/logos/SmartDashboard.svg')} style={{ height: '32px' }} />
           </Link>
         )}
 

@@ -283,7 +283,15 @@ title : " ljhskfhkdsf"
 
         <div style={chartContainerStyle}>
           <h2 style={titleStyle}>Bar Chart - Quarterly Sales Comparison</h2>
-          <BarChart categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']} data={barData} height={400} />
+          <BarChart
+            xAxisTitle="dsads"
+            yAxisTitle="dsads"
+            categories={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+            data={barData}
+            height={400}
+            showDataLabels={true}
+            showLegend={true}
+          />
         </div>
 
         <div style={chartContainerStyle}>

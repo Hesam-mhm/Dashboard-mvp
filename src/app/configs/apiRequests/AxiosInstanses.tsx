@@ -1,8 +1,5 @@
-import axios from 'axios';
+import { createAxiosInstance } from './Axios';
+import BaseUrls from './BaseUrls';
 
-export const frappeAxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_FRAPPE_API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+export const mainAxiosInstance = createAxiosInstance(BaseUrls.main);
+export const chartAxiosInstance = createAxiosInstance(BaseUrls.chart);

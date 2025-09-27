@@ -1,5 +1,8 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { ApexOptions } from 'apexcharts';
+import '../../main.css';
+// Define supported chart types
+type ApexChartType = 'line' | 'area' | 'bar' | 'pie' | 'donut' | 'radar' | 'scatter' | 'bubble' | 'heatmap';
 
 // Common chart theme configuration
 export interface ChartTheme {
@@ -10,9 +13,8 @@ export interface ChartTheme {
   fontFamily: string;
 }
 
-// Common chart settings that can be shared across all charts
-export interface ChartSettings {
-  // Animation settings
+   // Common chart settings that can be shared across all charts
+ export interface ChartSettings {
   animations: {
     enabled: boolean;
     speed: number;
@@ -25,8 +27,6 @@ export interface ChartSettings {
       speed: number;
     };
   };
-
-  // Toolbar settings
   toolbar: {
     show: boolean;
     tools: {
@@ -49,8 +49,6 @@ export interface ChartSettings {
       png: { filename?: string };
     };
   };
-
-  // Legend settings
   legend: {
     show: boolean;
     position: 'top' | 'right' | 'bottom' | 'left';
@@ -60,8 +58,6 @@ export interface ChartSettings {
     fontFamily: string;
     fontWeight: number | string;
   };
-
-  // Tooltip settings
   tooltip: {
     enabled: boolean;
     shared: boolean;
@@ -69,16 +65,12 @@ export interface ChartSettings {
     theme: 'light' | 'dark';
     fillSeriesColor: boolean;
   };
-
-  // Grid settings
   grid: {
     show: boolean;
     borderColor: string;
     strokeDashArray: number;
     position: 'front' | 'back';
   };
-
-  // Data labels settings
   dataLabels: {
     enabled: boolean;
     style: {
@@ -88,8 +80,6 @@ export interface ChartSettings {
       colors: string[];
     };
   };
-
-  // Responsive settings
   responsive: Array<{
     breakpoint: number;
     options: Partial<ApexOptions>;
@@ -102,8 +92,9 @@ interface ChartContextType {
   settings: ChartSettings;
   updateTheme: (theme: Partial<ChartTheme>) => void;
   updateSettings: (settings: Partial<ChartSettings>) => void;
+  // switchTheme: (themeName: keyof typeof chartThemes) => void;
   resetToDefaults: () => void;
-  getChartOptions: (chartType: string, customOptions?: Partial<ApexOptions>) => ApexOptions;
+  getChartOptions: (chartType: ApexChartType, customOptions?: Partial<ApexOptions>) => ApexOptions;
 }
 
 // Default theme configuration
@@ -112,7 +103,7 @@ const defaultTheme: ChartTheme = {
   background: 'transparent',
   textColor: '#333333',
   gridColor: '#e7e7e7',
-  fontFamily: 'Helvetica, Arial, sans-serif',
+  fontFamily: 'Vazirmatn FD, Arial, sans-serif', // Added fallback fonts
 };
 
 // Default chart settings
@@ -152,11 +143,11 @@ const defaultSettings: ChartSettings = {
   },
   legend: {
     show: true,
-    position: 'left',
+    position: 'bottom',
     horizontalAlign: 'right',
-    floating: false,
+    floating: true,
     fontSize: '14px',
-    fontFamily: 'Helvetica, Arial',
+    fontFamily: 'Vazirmatn FD, Arial, sans-serif',
     fontWeight: 400,
   },
   tooltip: {
@@ -173,10 +164,10 @@ const defaultSettings: ChartSettings = {
     position: 'back',
   },
   dataLabels: {
-    enabled: true,
+    enabled: false,
     style: {
       fontSize: '12px',
-      fontFamily: 'Helvetica, Arial',
+      fontFamily: 'Vazirmatn FD, Arial, sans-serif',
       fontWeight: 400,
       colors: ['#304758'],
     },
@@ -193,34 +184,74 @@ const defaultSettings: ChartSettings = {
   ],
 };
 
+// Utility function for deep merging objects
+const deepMerge = <T extends object>(target: T, source: Partial<T>): T => {
+  const output = { ...target };
+  for (const key in source) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      const targetValue = output[key];
+      const sourceValue = source[key];
+      if (
+        sourceValue &&
+        typeof sourceValue === 'object' &&
+        !Array.isArray(sourceValue) &&
+        targetValue &&
+        typeof targetValue === 'object'
+      ) {
+        output[key] = deepMerge(targetValue, sourceValue);
+      } else {
+        output[key] = sourceValue;
+      }
+    }
+  }
+  return output as T;
+};
+
+// Validate theme inputs
+const validateTheme = (theme: Partial<ChartTheme>): Partial<ChartTheme> => {
+  const validatedTheme = { ...theme };
+  if (theme.colors) {
+    validatedTheme.colors = theme.colors.filter((color) =>
+      /^#[0-9A-F]{6}$/i.test(color) || /^rgb(a)?\(/.test(color)
+    );
+    if (validatedTheme.colors.length === 0) {
+      console.warn('No valid colors provided, falling back to default colors');
+      validatedTheme.colors = defaultTheme.colors;
+    }
+  }
+  return validatedTheme;
+};
+
 // Create context
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
-// Chart provider component
-interface ChartProviderProps {
-  children: ReactNode;
-  initialTheme?: Partial<ChartTheme>;
-  initialSettings?: Partial<ChartSettings>;
-}
-
-export const ChartProvider: React.FC<ChartProviderProps> = ({ children, initialTheme = {}, initialSettings = {} }) => {
-  const [theme, setTheme] = React.useState<ChartTheme>({
-    ...defaultTheme,
-    ...initialTheme,
-  });
-
-  const [settings, setSettings] = React.useState<ChartSettings>({
-    ...defaultSettings,
-    ...initialSettings,
-  });
+/**
+ * Provides a context for managing chart themes and settings across the application.
+ * @param children - React components to be wrapped by the provider.
+ * @param initialTheme - Optional initial theme configuration.
+ * @param initialSettings - Optional initial chart settings.
+ */
+export const ChartProvider: React.FC<ChartProviderProps> = ({
+  children,
+  initialTheme = {},
+  initialSettings = {},
+}) => {
+  const [theme, setTheme] = React.useState<ChartTheme>(
+    deepMerge(defaultTheme, validateTheme(initialTheme))
+  );
+  const [settings, setSettings] = React.useState<ChartSettings>(deepMerge(defaultSettings, initialSettings));
 
   const updateTheme = React.useCallback((newTheme: Partial<ChartTheme>) => {
-    setTheme((prev) => ({ ...prev, ...newTheme }));
+    setTheme((prev) => deepMerge(prev, validateTheme(newTheme)));
   }, []);
 
   const updateSettings = React.useCallback((newSettings: Partial<ChartSettings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
+    setSettings((prev) => deepMerge(prev, newSettings));
   }, []);
+
+  // const switchTheme = React.useCallback((themeName: keyof typeof chartThemes) => {
+  //   setTheme(chartThemes[themeName]);
+  // }, []);
 
   const resetToDefaults = React.useCallback(() => {
     setTheme(defaultTheme);
@@ -228,35 +259,35 @@ export const ChartProvider: React.FC<ChartProviderProps> = ({ children, initialT
   }, []);
 
   const getChartOptions = React.useCallback(
-    (chartType: string, customOptions: Partial<ApexOptions> = {}): ApexOptions => {
-      const baseOptions: ApexOptions = {
-        chart: {
-          type: chartType as any,
-          background: theme.background,
-          fontFamily: theme.fontFamily,
-          foreColor: theme.textColor,
-          animations: settings.animations,
-          toolbar: settings.toolbar,
-        },
-        colors: theme.colors,
-        dataLabels: settings.dataLabels,
-        grid: settings.grid,
-        legend: settings.legend,
-        tooltip: settings.tooltip,
-        responsive: settings.responsive,
-      };
+    (chartType: ApexChartType, customOptions: Partial<ApexOptions> = {}): ApexOptions =>
+      React.useMemo(() => {
+        const baseOptions: ApexOptions = {
+          chart: {
+            type: chartType,
+            background: theme.background,
+            fontFamily: theme.fontFamily,
+            foreColor: theme.textColor,
+            animations: settings.animations,
+            toolbar: settings.toolbar,
+          },
+          colors: theme.colors,
+          dataLabels: settings.dataLabels,
+          grid: settings.grid,
+          legend: settings.legend,
+          tooltip: settings.tooltip,
+          responsive: settings.responsive,
+        };
 
-      // Merge with custom options (custom options take precedence)
-      return {
-        ...baseOptions,
-        ...customOptions,
-        chart: {
-          ...baseOptions.chart,
-          ...customOptions.chart,
-        },
-      };
-    },
-    [theme, settings],
+        return {
+          ...baseOptions,
+          ...customOptions,
+          chart: {
+            ...baseOptions.chart,
+            ...customOptions.chart,
+          },
+        };
+      }, [chartType, customOptions, theme, settings]),
+    [theme, settings]
   );
 
   const value: ChartContextType = {
@@ -264,6 +295,7 @@ export const ChartProvider: React.FC<ChartProviderProps> = ({ children, initialT
     settings,
     updateTheme,
     updateSettings,
+    // switchTheme,
     resetToDefaults,
     getChartOptions,
   };
@@ -271,7 +303,17 @@ export const ChartProvider: React.FC<ChartProviderProps> = ({ children, initialT
   return <ChartContext.Provider value={value}>{children}</ChartContext.Provider>;
 };
 
-// Custom hook to use chart context
+// Chart provider props
+interface ChartProviderProps {
+  children: ReactNode;
+  initialTheme?: Partial<ChartTheme>;
+  initialSettings?: Partial<ChartSettings>;
+}
+
+/**
+ * Custom hook to access chart context.
+ * @throws Error if used outside of a ChartProvider.
+ */
 export const useChartContext = (): ChartContextType => {
   const context = useContext(ChartContext);
   if (context === undefined) {
@@ -287,28 +329,28 @@ export const chartThemes = {
     background: '#ffffff',
     textColor: '#333333',
     gridColor: '#e7e7e7',
-    fontFamily: 'Helvetica, Arial, sans-serif',
+    fontFamily: 'Vazirmatn FD, Arial, sans-serif',
   },
   dark: {
     colors: ['#00D4AA', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
     background: '#1a1a1a',
     textColor: '#ffffff',
     gridColor: '#333333',
-    fontFamily: 'Helvetica, Arial, sans-serif',
+    fontFamily: 'Vazirmatn FD, Arial, sans-serif',
   },
   corporate: {
     colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
     background: '#f8f9fa',
     textColor: '#212529',
     gridColor: '#dee2e6',
-    fontFamily: 'Inter, system-ui, sans-serif',
+    fontFamily: 'Vazirmatn FD, Arial, sans-serif',
   },
   minimal: {
     colors: ['#6366f1', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
     background: 'transparent',
     textColor: '#374151',
     gridColor: '#f3f4f6',
-    fontFamily: 'system-ui, sans-serif',
+    fontFamily: 'Vazirmatn FD, Arial, sans-serif',
   },
 } as const;
 

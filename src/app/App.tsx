@@ -14,9 +14,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { PaginationProvider } from './context/PaginationContext';
 import { ChartProvider } from './context/ChartContext';
 
-// Lazy-load Toaster
-const Toaster = lazy(() => import('react-hot-toast').then((module) => ({ default: module.Toaster })));
-
 const App = () => {
   const cacheRtl = useMemo(
     () =>
@@ -52,7 +49,6 @@ const App = () => {
                       <PaginationProvider>
                         <ChartProvider>
                           <Outlet />
-                          <Toaster position="top-right" reverseOrder={true} />
                         </ChartProvider>
                       </PaginationProvider>
                     </ThemeModeProvider>

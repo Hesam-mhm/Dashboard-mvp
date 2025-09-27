@@ -1,10 +1,12 @@
 interface BaseUrls {
   main: string;
+  chart: string;
 }
 
 const getBaseUrls = (): BaseUrls => {
   return {
-    main: import.meta.env.VITE_MAIN_API_URL || 'https://staging.frappe.io',
+    main: 'http://109.206.252.58:8080',
+    chart: 'http://109.206.252.58:8090',
   };
 };
 

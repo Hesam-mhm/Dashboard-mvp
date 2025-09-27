@@ -21,31 +21,3 @@ export const queryClient = new QueryClient({
     },
   },
 });
-
-export const defaultQueryConfig = {
-  refetchOnWindowFocus: false,
-  retry: requestsConstants.retryCount,
-  staleTime: requestsConstants.staleTime,
-  gcTime: requestsConstants.gcTime,
-  select: (data: any) => data?.results || data,
-};
-
-export const defaultMutationConfig = {
-  onError: handleError,
-  onSuccess: handleSuccess,
-  onMutate: async () => {
-    toast.loading('در حال انجام عملیات...');
-  },
-  onSettled: () => {
-    toast.dismiss();
-  },
-};
-
-export const defaultInfiniteQueryConfig = {
-  getNextPageParam: (lastPage: any, allPages: any[]) => {
-    return lastPage.nextPage ? allPages.length + 1 : undefined;
-  },
-  refetchOnWindowFocus: false,
-  staleTime: requestsConstants.staleTime,
-  gcTime: requestsConstants.gcTime,
-};

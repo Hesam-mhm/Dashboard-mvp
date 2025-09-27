@@ -19,13 +19,13 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const loginSchema = Yup.object().shape({
-  email: Yup.string().email('فرمت ایمیل اشتباه است').min(3, 'حداقل 3 کاراکتر').max(50, 'حداکثر 50 کاراکتر').required('ایمیل الزامی است'),
-  password: Yup.string().min(3, 'حداقل 3 کاراکتر').max(50, 'حداکثر 50 کاراکتر').required('رمز عبور الزامی است'),
+  email: Yup.string(),
+  password: Yup.string().required('رمز عبور الزامی است'),
 });
 
 const initialValues = {
-  email: '',
-  password: '',
+  email: 'admin',
+  password: 'Admin',
 };
 
 export function Login() {
@@ -38,22 +38,8 @@ export function Login() {
     validationSchema: loginSchema,
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       setLoading(true);
-      try {
-        const loginResponse = await login(values.email, values.password);
-        if (loginResponse.message === 'Logged In') {
-          const userLoggedResponse = await getLoggedUser();
-          const userDetails = await getUserDetails(userLoggedResponse.message);
-          saveFrappeUser(userDetails);
-        } else {
-          throw new Error('خطا در ورود به سیستم');
-        }
-      } catch (error) {
-        console.error(error);
-        setStatus('نام کاربری یا رمز عبور اشتباه است');
-        setSubmitting(false);
-      } finally {
-        setLoading(false);
-      }
+      saveFrappeUser();
+      setLoading(false);
     },
   });
 

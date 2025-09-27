@@ -13,11 +13,9 @@ const container = document.getElementById('root');
 if (container) {
   createRoot(container).render(
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools />
       <AuthProvider>
         <AppRoutes />
       </AuthProvider>
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>,
   );
 }

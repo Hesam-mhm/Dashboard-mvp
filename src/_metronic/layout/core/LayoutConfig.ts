@@ -1,4 +1,4 @@
-import { createTheme, Theme } from '@mui/material';
+import { alpha, createTheme, Theme } from '@mui/material';
 import { COLORS } from '../../partials/layout/theme-mode/styled/constants';
 
 // Layout configuration interface
@@ -224,7 +224,7 @@ export const defaultLayoutConfig: LayoutConfig = {
   },
 
   content: {
-    backgroundColor: COLORS.COMMON.WHITE,
+    backgroundColor: COLORS.PRIMARY.LIGHT[200],
     padding: {
       top: 2,
       bottom: 2,

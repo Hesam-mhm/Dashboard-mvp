@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Box, Container, useTheme, useMediaQuery, Drawer, useScrollTrigger, Fab, Zoom, Toolbar } from '@mui/material';
+import { Box, Container, useTheme, useMediaQuery, Drawer, useScrollTrigger, Fab, Zoom, Toolbar, alpha } from '@mui/material';
 import { KeyboardArrowUp as KeyboardArrowUpIcon, Settings as SettingsIcon } from '@mui/icons-material';
 import { HeaderWrapper } from './components/header';
 import { RightToolbar } from '../partials/layout/RightToolbar';
@@ -63,7 +63,7 @@ const MasterLayoutContent = () => {
 
   return (
     <PageDataProvider>
-      <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: (theme) => alpha(theme.palette.primary.light, 0.2) }}>
         {/* Header */}
         <HeaderWrapper onMobileMenuToggle={handleDrawerToggle} />
 
@@ -145,7 +145,7 @@ const MasterLayoutContent = () => {
               sx={{
                 flexGrow: 1,
                 p: config.content.padding.top,
-                backgroundColor: config.content.backgroundColor,
+                // backgroundColor: (theme) => alpha(theme.palette.primary.light, 0.2),
               }}
             >
               <Container
@@ -191,7 +191,7 @@ const MasterLayoutContent = () => {
         </Fab>
 
         {/* Layout Settings */}
-        <LayoutSettings open={settingsOpen} onClose={handleSettingsToggle} />
+        {/* <LayoutSettings open={settingsOpen} onClose={handleSettingsToggle} /> */}
 
         {/* Additional components */}
         {/* <ActivityDrawer /> */}

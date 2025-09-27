@@ -49,23 +49,15 @@ const SidebarLogo = (props: PropsType) => {
       <div className="app-sidebar-logo px-6" id="kt_app_sidebar_logo" style={{ backgroundColor: theme.palette.background.paper }}>
         <Link to="/Home">
           {config.layoutType === 'dark-sidebar' ? (
-            <img alt="Logo" src={toAbsoluteUrl('media/logos/Volleyball-Logomark.svg')} className="h-25px app-sidebar-logo-default" />
+            <img alt="Logo" src={toAbsoluteUrl('media/logos/SmartDashboard.svg')} className="h-25px app-sidebar-logo-default" />
           ) : (
             <>
-              <img
-                alt="Logo"
-                src={toAbsoluteUrl('media/logos/Volleyball-Logomark.svg')}
-                className="h-40px app-sidebar-logo-default theme-light-show"
-              />
-              <img
-                alt="Logo"
-                src={toAbsoluteUrl('media/logos/Volleyball-Logomark.svg')}
-                className="h-40px app-sidebar-logo-default theme-dark-show"
-              />
+              <img alt="Logo" src={toAbsoluteUrl('media/logos/SmartDashboard.svg')} className="h-40px app-sidebar-logo-default theme-light-show" />
+              <img alt="Logo" src={toAbsoluteUrl('media/logos/SmartDashboard.svg')} className="h-40px app-sidebar-logo-default theme-dark-show" />
             </>
           )}
 
-          <img alt="Logo" src={toAbsoluteUrl('media/logos/Volleyball-Logomark.svg')} className="h-40px app-sidebar-logo-minimize" />
+          <img alt="Logo" src={toAbsoluteUrl('media/logos/SmartDashboard.svg')} className="h-40px app-sidebar-logo-minimize" />
         </Link>
       </div>
 
