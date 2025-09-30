@@ -1,36 +1,42 @@
-export type CreateDashboardRequestType = {
-    user_id: string;
-    name: string;
-    layout: {[key: string]: {}};
-    charts_order: string[];
+import { ChartPosition, Timestamped, UserScopedParams, PaginationParams, IdName } from "../GeneralTypes/Common.type";
+
+export type CreateDashboardRequestType = UserScopedParams & {
+    name?: string;
 };
 
-export type CreateDashboardResponseType = {
-    id: string;
-    name: string;
-    layout: {[key: string]: {}};
-    charts_order: string[];
-    created_at: string;
-    updated_at: string;
+export type CreateDashboardResponseType = Timestamped & IdName & {
+    chart_positions?: ChartPosition[];
 };
 
 
-export type GetDashboardsQueryParamType = {
-    user_id : string;
-    limit : number;
-    offset : number;
-}
+
+export type GetDashboardsQueryParamType = UserScopedParams & PaginationParams;
 
 export type GetDashboardsResponseType = {
-    dashboards:CreateDashboardResponseType[]
-}
+    dashboards?: CreateDashboardResponseType[];
+};
 
-export type GetDashboardByIdQueryParamType = {
-    user_id : string;
-    dashboard_id : string;
-}
+export type GetDashboardByIdQueryParamType = UserScopedParams & {
+    dashboard_id?: string;
+};
 
-export type GetDashboardByIdResponseType = CreateDashboardResponseType
-export type UpdateDashboardRequestType = CreateDashboardRequestType
-export type UpdateDashboardResponseType = CreateDashboardResponseType
-export type DeleteDashboardQueryParamType = GetDashboardByIdQueryParamType
+export type GetDashboardByIdResponseType = CreateDashboardResponseType;
+export type UpdateDashboardRequestType = {
+    dashboard_id?: string;
+    data?: {
+        user_id?: string;
+        name?: string;
+        chart_positions?: ChartPosition[];
+    };
+};
+export type UpdateDashboardResponseType = CreateDashboardResponseType;
+export type DeleteDashboardQueryParamType = GetDashboardByIdQueryParamType;
+
+export type AddChartToDashboardRequestType = UserScopedParams & {
+    dashboard_ids?: string[];
+    chart_ids?: string[];
+};
+
+export type AddChartToDashboardResponseType = Timestamped & IdName & {
+    chart_positions?: ChartPosition[];
+};

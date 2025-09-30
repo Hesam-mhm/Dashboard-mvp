@@ -1,10 +1,10 @@
 import { Box, Button, Dialog, Divider, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import TextfieldComponent from '../molecule/FormComponents/TextfieldComponent';
-import CustomLoading from '../atome/CustomLoading';
 import { AddCircleIcon } from '../..//Iconify/AddCircleIcon';
 import { BarChart, PieChart, RadialBarChart, SimpleLineChart } from '.';
 import React from 'react';
+
 
 type ChartRequestDialogProps = {
   open: boolean;
@@ -13,6 +13,8 @@ type ChartRequestDialogProps = {
   chartData: any | null;
   control: any;
   onGenerate: () => void;
+  onAddToDashboard: () => void;
+  isAddingChartToDashboard: boolean;
 };
 
 const RenderContent = (chartType: string, data: any): React.ReactNode => {
@@ -55,6 +57,8 @@ const ChartRequestDialog: React.FC<ChartRequestDialogProps> = ({
   chartData,
   control,
   onGenerate,
+  onAddToDashboard,
+  isAddingChartToDashboard,
 }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
@@ -81,7 +85,9 @@ const ChartRequestDialog: React.FC<ChartRequestDialogProps> = ({
         </Stack>
 
         {isPending ? (
-          <CustomLoading />
+          <Typography variant="body1" color="text.secondary">
+            نمودار در حال ایجاد است ...
+          </Typography>
         ) : (
           chartData && (
             <>
@@ -99,9 +105,11 @@ const ChartRequestDialog: React.FC<ChartRequestDialogProps> = ({
           <Button variant="outlined" color="secondary" sx={{ height: 51, width: '17%' }} onClick={onClose}>
             انصراف
           </Button>
-          <Button variant="contained" sx={{ height: 51, width: '17%' }} startIcon={<AddCircleIcon />}>
+          <LoadingButton  
+          variant="contained" sx={{ height: 51, width: '17%' }} startIcon={<AddCircleIcon />} 
+          loading={isAddingChartToDashboard} onClick={onAddToDashboard} disabled={isPending || isAddingChartToDashboard}>
             افزودن به داشبرد
-          </Button>
+          </LoadingButton>
         </Stack>
       </Stack>
     </Dialog>

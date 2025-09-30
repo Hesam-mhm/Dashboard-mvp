@@ -1,10 +1,19 @@
 const EndPoints = {
     DASHBOARD : {
         CREATE : "/dashboards/",
-        GET_ALL : "/dashboards/",
-        GET : "/dashboards/{dashboard_id}/",
-        UPDATE : "/dashboards/{dashboard_id}/",
-        DELETE : "/dashboards/{dashboard_id}/",
+        getAllDashboards : "/dashboards/",
+        getDashboardById : "/dashboards/{dashboard_id}/",
+        updateDashboard : "/dashboards/{dashboard_id}/",
+        deleteDashboard : "/dashboards/{dashboard_id}/",
+        addChartToDashboard : "/dashboards/add-charts",
+    },
+    CHARTS : {
+        getAllCharts : "/charts/",
+        updateChart : "/charts/{chart_id}",
+        deleteChart : "/charts/{chart_id}",
+        generateChart : "/charts/generate-chart",
+        confirmChart : "/charts/confirm-chart",
+        confirmAndAddChartToDashboard : "/charts/preview-confirm-add-to-dashboard",
     }
     
 }

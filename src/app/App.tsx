@@ -13,6 +13,8 @@ import createCache from '@emotion/cache';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { PaginationProvider } from './context/PaginationContext';
 import { ChartProvider } from './context/ChartContext';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './configs/apiRequests/ReactQuery';
 
 const App = () => {
   const cacheRtl = useMemo(
@@ -37,6 +39,7 @@ const App = () => {
 
   const appContent = useMemo(
     () => (
+      <QueryClientProvider client={queryClient}>
       <MetronicI18nProvider>
         <I18nProvider>
           <CacheProvider value={cacheRtl}>
@@ -59,6 +62,7 @@ const App = () => {
           </CacheProvider>
         </I18nProvider>
       </MetronicI18nProvider>
+      </QueryClientProvider>
     ),
     [cacheRtl, theme],
   );

@@ -37,13 +37,19 @@ export type SidebarEntry = SidebarItem | SidebarGroup;
 
 export const SidebarMapper: SidebarEntry[] = [
   {
+    title: 'داشبورد ها',
+    to: RouteMapper.dashboards.path,
+    Icon: <SolarGraphBoldDuotone />,
+    boldIcon: <SolarGraphBoldDuotone />,
+    roles: [Roles.SystemManager],
+  },
+  {
     title: 'داشبورد',
     to: RouteMapper.Home.path,
     Icon: <SolarGraphBoldDuotone />,
     boldIcon: <SolarGraphBoldDuotone />,
     roles: [Roles.SystemManager],
   },
-
   {
     title: 'نمودارها مثال',
     to: RouteMapper.ChartsExample.path,

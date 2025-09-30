@@ -14,7 +14,14 @@ interface SimpleLineChartProps {
   
 }
 
-const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, xAxisTitle, yAxisTitle, options: customOptions, height = 400, width = '100%' }) => {
+const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ 
+  data, 
+  xAxisTitle, 
+  yAxisTitle, 
+  options: customOptions, 
+  height = 400, 
+  width = '100%' 
+}) => {
   // Try to use chart context, fall back to defaults if not available
   let contextOptions: ApexOptions = {};
   try {
@@ -22,8 +29,8 @@ const SimpleLineChart: React.FC<SimpleLineChartProps> = ({ data, xAxisTitle, yAx
     contextOptions = getChartOptions('line', {
       chart: { height, width },
       legend: { show: true },
-      title: { text: xAxisTitle || '', align: 'center' },
-      xaxis: { type: 'datetime', labels: { rotate: -45 } , position: 'bottom'},
+      title: {  align: 'center' },
+      xaxis: { type: 'datetime', title: { text: xAxisTitle || '' }, labels: { rotate: -45 } , position: 'bottom'},
       yaxis: [
         {
           title: { text: yAxisTitle || '' },

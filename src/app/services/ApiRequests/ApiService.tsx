@@ -1,7 +1,9 @@
-import { requestChart } from './Charts/';
+import { ChartsApiRequests } from './Charts/';
+import { DashboardsApiRequests } from './Dashboards';
 
 const ApiService = {
-  requestChart,
+  ChartsApiRequests,
+  DashboardsApiRequests,
 };
 
 export default ApiService;

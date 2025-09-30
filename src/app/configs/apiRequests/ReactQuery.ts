@@ -5,7 +5,10 @@ import { requestsConstants, handleError, handleSuccess } from './settings';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+
+      refetchOnReconnect: true,
       refetchOnWindowFocus: true,
+      refetchOnMount: true,
       retry: (failureCount, error: any) => {
         if ([401, 403, 404].includes(error?.response?.status)) {
           return false;

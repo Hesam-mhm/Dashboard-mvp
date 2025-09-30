@@ -5,9 +5,11 @@ import TopBarProgress from 'react-topbar-progress-indicator';
 import { getCSSVariableValue } from '../../_metronic/assets/ts/_utils';
 import { RouteMapper } from './RouteMapper/RouteMapper';
 import { useTheme } from '@mui/material';
-import { Home } from '../pages/Home/Home';
+import Home from '../pages/Home/Home';
 import DashboardBuilder from '../pages/dashboard-builder/DashboardBuilder';
 import ChartsExample from '../pages/ChartsExample/ChartsExample';
+import Dashboards from '../pages/Dashboards/Dashboards';
+import DashboardDetail from '../pages/Dashboards/DashboardDetail/DashboardDetail';
 
 // const FinancialManagerReviewAdvancePayment = lazy(
 //   () =>
@@ -66,7 +68,22 @@ const PrivateRoutes = () => {
             </Suspense>
           }
         />
-
+        <Route
+          path={RouteMapper.dashboards.path}
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Dashboards />
+            </Suspense>
+          }
+        />
+        <Route
+          path={RouteMapper.dashboardDetail.path}
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <DashboardDetail />
+            </Suspense>
+          }
+        />
         {/* Page Not Found */}
         <Route path="*" element={<Navigate to="/error/404" />} />
       </Route>

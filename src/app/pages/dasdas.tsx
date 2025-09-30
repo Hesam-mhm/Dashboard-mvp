@@ -165,7 +165,7 @@
 //   const [chartData, setChartData] = useState<any>(null);
 //   const [isRequestOpen, setIsRequestOpen] = useState(false);
 //   const [isSortDialogOpen, setIsSortDialogOpen] = useState(false);
-//   const [isSortable, setIsSortable] = useState(false);
+//   const [isEditable, setisEditable] = useState(false);
 //   const [items, setItems] = useState<GridItem[]>([
 //     { id: '1', title: 'آیتم ۱', size: 'large', content:{
 //       "pending_chart_id": "f1bd2dcb-593c-4cd9-a29d-69e4f6fc214e",
@@ -763,23 +763,23 @@
 //                     element: (
 //                       <Stack direction="row" alignItems="center" spacing={2} justifyContent="end">
 //                         <Button   sx={{ mt: 0, justifySelf: 'start' }} variant="outlined" 
-//                         onClick={() => setIsSortable(!isSortable)}
-//                         color={isSortable ? 'error' : 'secondary'} startIcon={isSortable ?<SolarCloseCircleLineDuotone   /> :  <SortIcon />}>
-//                           {isSortable ? 'لغو' : 'مرتب کردن'} </Button>
+//                         onClick={() => setisEditable(!isEditable)}
+//                         color={isEditable ? 'error' : 'secondary'} startIcon={isEditable ?<SolarCloseCircleLineDuotone   /> :  <SortIcon />}>
+//                           {isEditable ? 'لغو' : 'مرتب کردن'} </Button>
 //                         <Button sx={{ mt: 0 }} variant="outlined" color="secondary" onClick={() => setIsSortDialogOpen(true)}>
 //                           مرتب‌سازی در نمای کلی
 //                         </Button>
-//                         <Button  sx={{ mt: 0, justifySelf: 'start' }} variant="contained" color={isSortable ? 'success' : 'primary'} 
-//                         startIcon={isSortable ? <SolarCheckCircleBoldDuotone /> : <SolarAddCircleLineDuotone />}
+//                         <Button  sx={{ mt: 0, justifySelf: 'start' }} variant="contained" color={isEditable ? 'success' : 'primary'} 
+//                         startIcon={isEditable ? <SolarCheckCircleBoldDuotone /> : <SolarAddCircleLineDuotone />}
 //                         onClick={() => {
-//                           if (isSortable) {
-//                             setIsSortable(false);
+//                           if (isEditable) {
+//                             setisEditable(false);
                             
 //                           } else {
 //                             setIsRequestOpen(true);
 //                           }
 //                         }}
-//                         >{isSortable ? 'تایید' : 'نمودار جدید'} </Button>
+//                         >{isEditable ? 'تایید' : 'نمودار جدید'} </Button>
 //                       </Stack>
 //                     ),
 //                   },
@@ -806,7 +806,7 @@
 //                             bgcolor: 'action.hover' }}>
 //                         </Grid>
 //                       )}
-//                       <SortableGridChartItem key={item.id} item={item} isSortable={isSortable} onRemove={handleRemoveItem} />
+//                       <SortableGridChartItem key={item.id} item={item} isEditable={isEditable} onRemove={handleRemoveItem} />
 //                     </>
 //                   ))}
 //                 </Grid>

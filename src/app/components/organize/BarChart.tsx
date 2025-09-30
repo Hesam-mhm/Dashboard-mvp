@@ -24,8 +24,7 @@ interface BarChartProps {
 const BarChart: React.FC<BarChartProps> = ({
   data,
   options: customOptions,
-  height = 400,
-  width = '100%',
+
   horizontal = false,
   colors,
   showDataLabels,
@@ -34,8 +33,10 @@ const BarChart: React.FC<BarChartProps> = ({
   categories,
   xAxisTitle,
   yAxisTitle = 'Value',
-  columnWidth = '55%',
+  columnWidth = '20%',
   borderRadius = 4,
+  height = 400,
+  width = '100%',
 }) => {
   // Try to use chart context, fall back to defaults if not available
   let contextOptions: ApexOptions = {};
@@ -163,7 +164,7 @@ const BarChart: React.FC<BarChartProps> = ({
   const options = { ...contextOptions, ...customOptions };
 
   return (
-    <div className="bar-chart" style={{ minHeight: '400px', minWidth: '100%' }}>
+    <div className="bar-chart" >
       <Chart options={options} series={series} type="bar" height={height} width={width} />
     </div>
   );

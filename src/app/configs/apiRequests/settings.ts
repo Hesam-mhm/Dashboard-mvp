@@ -5,7 +5,7 @@ export const requestsConstants = {
   baseUrl: baseUrls.main,
   timeout: 60000,
   retryCount: 3,
-  staleTime: 5 * 60 * 1000,
+  staleTime: 0,
   gcTime: 30 * 60 * 1000,
 };
 
@@ -46,6 +46,7 @@ export const handleError = (error: any) => {
 
 export const handleSuccess = (data: any) => {
   if (data?.message) {
+    
     toast.success(data.message);
   }
 };

@@ -5,6 +5,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors } from
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { BarChart, PieChart, SimpleLineChart } from '.';
+import { LoadingButton } from '@mui/lab';
 
 type SortItem = {
   id: string;
@@ -16,15 +17,17 @@ type SortItem = {
 type SortGridDialogProps = {
   open: boolean;
   items: SortItem[];
+  isSorting: boolean;
   onClose: () => void;
   onApply: (orderedIds: string[]) => void;
 };
 
-export default function SortGridDialog({ open, items, onClose, onApply }: SortGridDialogProps) {
+export default function SortGridDialog({ open, items, onClose, onApply, isSorting }: SortGridDialogProps) {
   const [localItems, setLocalItems] = useState<SortItem[]>(items);
 
   React.useEffect(() => {
     setLocalItems(items);
+   
   }, [items]);
 
   const sensors = useSensors(
@@ -44,7 +47,7 @@ export default function SortGridDialog({ open, items, onClose, onApply }: SortGr
 
   return (
     <Dialog  open={open} onClose={onClose}>
-      <AppBar sx={{ position: 'sticky' }} color="default" elevation={1}>
+      <AppBar sx={{ position: 'sticky',backgroundColor: 'background.paper' }} color="default" elevation={1}>
         <Toolbar>
           <IconButton edge="start" onClick={onClose} aria-label="close">
             <CloseIcon />
@@ -52,20 +55,21 @@ export default function SortGridDialog({ open, items, onClose, onApply }: SortGr
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
             مرتب‌سازی نمودارها (نمای کلی)
           </Typography>
-          <Button color="primary" variant="contained" onClick={() => onApply(orderedIds)}>
+          <LoadingButton loading={isSorting} color="primary" sx={{ height: '40px' }} variant="contained" onClick={() => onApply(orderedIds)}>
             اعمال ترتیب
-          </Button>
+          </LoadingButton>
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ p: 2 , maxWidth:500}}>
+      <Box sx={{ p: 2 , maxWidth:700}}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           برای جابجایی، آیتم‌ها را بکشید و رها کنید. برای دید بهتر، اندازه کاشی‌ها کوچک شده است.
         </Typography>
         <Box
           sx={{
             width: '100%',
-            overflow: 'auto',
+            overflow: 'auto'
+            ,height: '700px'
           }}
         >
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
@@ -75,6 +79,7 @@ export default function SortGridDialog({ open, items, onClose, onApply }: SortGr
                   display: 'grid',
                   gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
                   gap: 2,
+               
                 }}
               >
                 {localItems.map((item) => (
@@ -98,7 +103,7 @@ function SortTile({ id, title, chart_type, preview }: { id: string; title: strin
     transition,
   } as React.CSSProperties;
   const spanCols = chart_type === 'pie_chart' ? 6 : 12;
-  const miniHeight = chart_type === 'pie_chart' ? 120 : 140;
+  const miniHeight =  140;
 
   return (
     <Box
@@ -125,20 +130,22 @@ function SortTile({ id, title, chart_type, preview }: { id: string; title: strin
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <Typography variant="body2" sx={{ px: 1, mb: 1 }} noWrap>
+        <Typography variant="body2" sx={{ px: 2, mb: 0.5}} noWrap>
           {title}
         </Typography>
-        <Box sx={{ flex: 1, px: 0.5 }}>
-          {chart_type === 'line_chart' && preview?.data ? (
+        <Box sx={{ flex: 1 }}>
+          {chart_type === 'line_chart' ? (
             <SimpleLineChart
               xAxisTitle={preview?.xAxisTitle}
               yAxisTitle={preview?.yAxisTitle}
               data={preview?.data}
-              height={miniHeight - 40}
-              options={{
+              height={miniHeight -40}
+              options={
+                {
                 tooltip: {
                   enabled: false,
                 },
+                        
                 dataLabels: {
                   enabled: false,
                 },
@@ -160,9 +167,14 @@ function SortTile({ id, title, chart_type, preview }: { id: string; title: strin
                 legend: {
                   show: false,
                 },
+                title: {
+                  style: {
+                    fontSize: '0px',
+                  },
+                },
               }}
             />
-          ) : chart_type === 'pie_chart' && preview?.data && preview?.labels ? (
+          ) : chart_type === 'pie_chart' ? (
             <PieChart
               data={[{ data: preview?.data }]}
               labels={preview?.labels}
@@ -194,7 +206,7 @@ function SortTile({ id, title, chart_type, preview }: { id: string; title: strin
                 },
               }}
             />
-          ) : chart_type === 'bar_chart' && preview?.data ? (
+          ) : chart_type === 'bar_chart'  ? (
             <BarChart
               xAxisTitle={preview?.xAxisTitle}
               yAxisTitle={preview?.yAxisTitle}

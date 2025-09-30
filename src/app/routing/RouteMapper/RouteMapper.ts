@@ -13,4 +13,12 @@ export const RouteMapper = {
     path: '/ChartsExample',
     title: 'نمودارها',
   },
+  dashboards: {
+    path: '/dashboards',
+    title: 'نمودارها',
+  },
+  dashboardDetail: {
+    path: '/dashboards/dashboardDetail/:id',
+    title: 'جزئیات داشبورد',
+  },
 };

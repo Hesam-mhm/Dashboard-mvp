@@ -1,119 +1,134 @@
-// import { Button,Grid, useTheme } from '@mui/material';
-// import { useState } from 'react';
-// import DashletsManagingListItem from '../../../pages-util/Reports/DashletsManaging/DashletsListItem';
-// import { Icon } from '@iconify/react/dist/iconify.js';
-// import AddDashletDialog from '../../../pages-util/Reports/DashletsManaging/AddDashletDialog';
-// import { useDeleteDashlet, useGetDashletsList } from '../../../services/Requests/Reports/DashletManaging/query';
-// import CustomLoading from '../../../components/CustomLoading';
-// import ConfirmOperationDialog from '../../../components/ConfirmOperationDialog';
-// import EditDashletNameDialog from '../../../pages-util/Reports/DashletsManaging/EditDashletNameDialog';
-// import { useNavigate } from 'react-router-dom';
+import { Button,Grid, useTheme } from '@mui/material';
+import { useState } from 'react';
+import { useDeleteDashboard, useGetAllDashboards } from '../../services/ApiRequests/Dashboards/query';
+import { useNavigate } from 'react-router-dom';
+import AddDashboard from '../../page-utils/Dashboard/AddDashboard';
+import DashboardItem from '../../page-utils/Dashboard/DashboardItem';
+import EditDashboard from '../../page-utils/Dashboard/EditDashboard';
+import CustomLoading from '../../components/atome/CustomLoading';
+import { SolarAddCircleLineDuotone } from '../../Iconify/SolarAddCircleLineDuotone';
+import { user_id } from '../../constants/userid';
+import { GetDashboardsQueryParamType } from '../../../types/Dashboard/CreateDashboard.type';
+import SimpleDialog from '../../components/organize/SimpleDialog';
+import { RouteMapper } from '../../routing/RouteMapper/RouteMapper';
 
 
 
-// const Dashboards = () => {
-//    const [showAddDashletDialog,setShowAddDashletDialog] = useState<boolean>(false)
-//    const [showEditDashletDialog,setShowEditDashletDialog] = useState<boolean>(false)
-//    const [showDeleteDashletDialog,setShowDeleteDashletDialog] = useState<boolean>(false)
-//    const [dashletToDelete,setDashletToDelete] = useState<string>()
-//    const [dashletToEditId,setDashletToEditId] = useState<string>()
-//    const [dashletToEditTitle,setDashletToEditTitle] = useState<string>()
-//    const {data:dashletsListData , isLoading : loadingOnGetDashletsListData} = useGetDashletsList()
-//    const {mutate:deleteDashlet , isLoading : loadingOnDeleteDashlet} = useDeleteDashlet(dashletToDelete!,setShowDeleteDashletDialog)
-//    const theme = useTheme()
+const Dashboards = () => {
+   const [showAddDashboardDialog,setShowAddDashboardDialog] = useState<boolean>(false)
+   const [showEditDashboardDialog,setShowEditDashboardDialog] = useState<boolean>(false)
+   const [showDeleteDashboardDialog,setShowDeleteDashboardDialog] = useState<boolean>(false)
+   const [DashboardToDelete,setDashboardToDelete] = useState<string>()
+   const [DashboardToEditId,setDashboardToEditId] = useState<string>()
+   const [DashboardToEditTitle,setDashboardToEditTitle] = useState<string>()
+   const [filter, setFilter] = useState<Omit<GetDashboardsQueryParamType, 'limit' | 'offset'>>({user_id:user_id});
+   const {data:DashboardsListData , isLoading : loadingOnGetDashboardsListData} = useGetAllDashboards({...filter,limit:5,offset:0})
+    const {mutate:deleteDashboard , isPending : loadingOnDeleteDashboard} = useDeleteDashboard()
+   const theme = useTheme()
 
 
 
-// const handleConfirmDeleteDashlete = ()=>{
+const handleConfirmDeleteDashboarde = ()=>{
   
-//  deleteDashlet(dashletToDelete!)
-// }
+ deleteDashboard({dashboard_id:DashboardToDelete!,user_id:user_id},{
+  onSuccess:()=>{
+    setShowDeleteDashboardDialog(false)
+    setDashboardToDelete(undefined)
+  },
+  onError:(error)=>{
+    setShowDeleteDashboardDialog(false)
+  }
+ }  )
+}
    
-// const handleClickOnDelete = (id:string)=>{
-//   setDashletToDelete(id)
-//  setShowDeleteDashletDialog(true)
-// }  
+const handleClickOnDelete = (id:string)=>{
+  setDashboardToDelete(id)
+ setShowDeleteDashboardDialog(true)
+}  
 
-// const handleClickOnEdit = (id:string,title:string)=>{
-//   setDashletToEditId(id)
-//   setDashletToEditTitle(title)  
-//  setShowEditDashletDialog(true)
-// }
-// const navigate = useNavigate()
+const handleClickOnEdit = (id:string,title:string)=>{
+  setDashboardToEditId(id)
+  setDashboardToEditTitle(title)  
+ setShowEditDashboardDialog(true)
+}
+const navigate = useNavigate()
 
-//     return (
-//         <Grid container p={1}>
+    return (
+        <Grid container p={1}>
 
  
-//             {/*Submit Card*/}
-//            <Grid item container xs={12}
-//             sx={{
-//                 justifyContent:"start",
-//                 alignItems:"center",
-//                 p:2,
-//                 height : "88px",
-//                 backgroundColor : theme.palette.background.paper , 
-//                 mb:2,
-//                 mx:1,
-//                 boxShadow: "0 -3px 15px rgba(141,141,141,0.05)",
-//             }}
-//            >
-//             <Grid item xs={12} lg={1.5}>
-//             <Button fullWidth variant='contained' sx={{height:56 , borderRadius:2}} 
-//            startIcon = {<Icon icon={"gala:add"} />}
-//            onClick={()=>{setShowAddDashletDialog(true)}}
-//            >
-//             ثبت دشلت جدید
-//            </Button>
-//             </Grid>
+            {/*Submit Card*/}
+           <Grid item container xs={12}
+            sx={{
+                justifyContent:"start",
+                alignItems:"center",
+                p:2,
+                height : "88px",
+                backgroundColor : theme.palette.background.paper , 
+                mb:2,
+                mx:1,
+                boxShadow: "0 -3px 15px rgba(141,141,141,0.05)",
+            }}
+           >
+            <Grid item xs={12} lg={1.5}>
+            <Button fullWidth variant='contained' sx={{height:56 , borderRadius:2}} 
+           startIcon = {<SolarAddCircleLineDuotone />}
+           onClick={()=>{setShowAddDashboardDialog(true)}}
+           >
+            ثبت داشبورد جدید
+           </Button>
+            </Grid>
   
-//            </Grid>
+           </Grid>
            
-//            {
-//             loadingOnGetDashletsListData ? <CustomLoading /> :
+           {
+            loadingOnGetDashboardsListData ? <CustomLoading /> :
 
-//             dashletsListData?.map((dashlet)=>{
-//               return (
-//               <Grid item xs={12} sm={6} lg={4} p={1}>
-//                 <DashletsManagingListItem 
-//                 onClick={()=>{navigate(`/Reports/DashletsManaging/DashletDetail/${dashlet.dashlet_id}`)}}
-//                 dashletTitle={dashlet.dashlet_title}
-//                 onClickDelete={()=>{handleClickOnDelete(dashlet.dashlet_id)}}
-//                 onClickEdit={()=>{handleClickOnEdit(dashlet.dashlet_id,dashlet.dashlet_title)}}
-//                 />
-//               </Grid>)
-//             })
+            DashboardsListData?.dashboards.map((Dashboard)=>{
+              return (
+              <Grid item xs={12} sm={6} lg={4} p={1}>
+                <DashboardItem 
+                onClick={()=>{navigate(RouteMapper.dashboardDetail.path.replace(":id",Dashboard.id))}}
+                DashboardTitle={Dashboard.name}
+                onClickDelete={()=>{handleClickOnDelete(Dashboard.id)}}
+                onClickEdit={()=>{handleClickOnEdit(Dashboard.id,Dashboard.name)}}
+                />
+              </Grid>)
+            })
 
-//            }
+           }
      
-//          <EditDashletNameDialog 
-//           dashletId={dashletToEditId!}
-//          dashletTitle={dashletToEditTitle!}
-//          dialogContentText='ثبت ویرایش نام دشلت'
-//          dialogTitle='ویرایش نام دشلت'
-//          isOpenDialog ={showEditDashletDialog}
-//          setShowDialog={setShowEditDashletDialog} 
-//          />
-
-//          <ConfirmOperationDialog 
-//          dialogContentText='آیا از حذف دشلت اطمینان دارید ؟'
-//          dialogTitle='حذف دشلت'
-//          handleAccept={handleConfirmDeleteDashlete}
-//          handleIgnore={()=>{setShowDeleteDashletDialog(false)}}
-//          isOpenDialog = {showDeleteDashletDialog}
-//          loadingButton = {loadingOnDeleteDashlet}
-//          />
-
-//           <AddDashletDialog 
-//           dialogContentText='ثبت  جدید'
-//           dialogTitle='نام دشلت را وارد کنید'
-//           isOpenDialog={showAddDashletDialog}
-//           setShowDialog={setShowAddDashletDialog}
-//              />
+         <EditDashboard 
+          DashboardId={DashboardToEditId!}
+         DashboardTitle={DashboardToEditTitle!}
+         dialogContentText='ثبت ویرایش نام داشبورد'
+         dialogTitle='ویرایش نام داشبورد'
+         isOpenDialog ={showEditDashboardDialog}
+         setShowDialog={setShowEditDashboardDialog} 
+         />
 
 
-//         </Grid>
-//     );
-// };
+           <SimpleDialog 
+           showDialog={showDeleteDashboardDialog}
+           setShowDialog={setShowDeleteDashboardDialog}
+           buttonOnclick={handleConfirmDeleteDashboarde}
+           buttonLoading={loadingOnDeleteDashboard}
+           dialogContentText='آیا از حذف داشبورد اطمینان دارید ؟'
+           dialogTitle='حذف داشبورد'
+           mainButtonTitle='حذف'
+           />
+        
 
-// export default Dashboards;
+          <AddDashboard 
+          dialogContentText='ثبت  جدید'
+          dialogTitle='نام داشبورد را وارد کنید'
+          isOpenDialog={showAddDashboardDialog}
+          setShowDialog={setShowAddDashboardDialog}
+             />
+
+
+        </Grid>
+    );
+};
+
+export default Dashboards;
