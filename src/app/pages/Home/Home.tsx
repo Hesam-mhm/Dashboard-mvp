@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack } from '@mui/material';
+import { Box, Button, Grid, MenuItem, Select, Stack } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
 import { user_id } from '../../constants/userid';
 import {  useConfirmAndAddChartToDashboard, useConfirmPendingChart, useDeleteChart, useGetAllCharts, useRequestChart } from '../../services/ApiRequests/Charts/query';
@@ -12,19 +12,14 @@ import { SolarCheckCircleBoldDuotone } from '../../Iconify/SolarCheckCircleBoldD
 import SortGridDialog from '../../components/organize/SortGridDialog';
 import { useParams } from 'react-router-dom';
 import SimpleDialog from '../../components/organize/SimpleDialog';
-import { useGetDashboardById, useUpdateDashboard } from '../../services/ApiRequests/Dashboards/query';
+import useGetAllDashboards, { useGetDashboardById, useUpdateDashboard } from '../../services/ApiRequests/Dashboards/query';
 import toast from 'react-hot-toast';
 import CustomLoading from '../../components/atome/CustomLoading';
 import { UpdateDashboardRequestType } from '../../../types/Dashboard/CreateDashboard.type';
 
 
 const Home = () => {
-  const  id  = '1009df35-385f-48ed-ac7d-fbc6311c1929';
-  const { mutate: requestChart, isPending:isPendingRequestChart, error } = useRequestChart();
-  const { mutate: confirmAndAddChartToDashboard, isPending: isAddingChartToDashboard } = useConfirmAndAddChartToDashboard();
-  const { mutate: deleteChart, isPending: isDeletingChart } = useDeleteChart();
-  const { mutate: updateDashboard, isPending: isUpdatingDashboard } = useUpdateDashboard();
-  const { data: DashboardDetailData, isLoading: isLoadingDashboardDetailData } = useGetDashboardById({ user_id: user_id, dashboard_id: id });
+
   const [chartData, setChartData] = useState<any>(null);
   const [isRequestOpen, setIsRequestOpen] = useState(false);
   const [isEditable, setisEditable] = useState(false);
@@ -32,13 +27,29 @@ const Home = () => {
   const [currentPendingChartId, setCurrentPendingChartId] = useState<string | null>(null);
   const [showDeleteChartDialog, setShowDeleteChartDialog] = useState(false);
   const [deleteChartId, setDeleteChartId] = useState<string | null>(null);
-
+  const [activeDashboardId, setActiveDashboardId] = useState<string | null>(null);
 
   const methods = useForm({
     defaultValues: {
       subject: '',
+      dashboard_id: '',
     },
   });
+
+  const { mutate: requestChart, isPending:isPendingRequestChart, error } = useRequestChart();
+  const { mutate: confirmAndAddChartToDashboard, isPending: isAddingChartToDashboard } = useConfirmAndAddChartToDashboard();
+  const { mutate: deleteChart, isPending: isDeletingChart } = useDeleteChart();
+  const { mutate: updateDashboard, isPending: isUpdatingDashboard } = useUpdateDashboard();
+  const { data: DashboardDetailData, isLoading: isLoadingDashboardDetailData } = useGetDashboardById({ user_id: user_id, dashboard_id: activeDashboardId });
+  const {data  : dashboardsListData , isLoading : isLoadingDashboardsListData} = useGetAllDashboards({user_id:user_id,limit:100,offset:0})
+
+  useEffect(() => {
+    if (dashboardsListData) {
+      setActiveDashboardId(dashboardsListData.dashboards[0].id);
+    }
+  }, [dashboardsListData]);
+  
+
 
   const requestToCreateChart = () => {
     const dataToSend: RequestChartType = {
@@ -63,7 +74,7 @@ const Home = () => {
     const dataToSend: ConfirmAndAddChartToDashboardRequestType = {
       user_id: user_id,
       chart_id: currentPendingChartId,
-      dashboard_id: id,
+      dashboard_id: activeDashboardId,
     };
     confirmAndAddChartToDashboard(dataToSend, {
       onSuccess: () => {
@@ -104,7 +115,7 @@ const Home = () => {
   const handleDashboardUpdate = (orderedIds: string[]) => {
    const dataToSend: UpdateDashboardRequestType = {
   
-    dashboard_id: id,
+    dashboard_id: activeDashboardId,
     data: {
       user_id: user_id,
       chart_positions: orderedIds.map((id,index) => ({ chart_id: id, position: index })),
@@ -123,7 +134,7 @@ const Home = () => {
     });
   }
 
-  return isLoadingDashboardDetailData ? 
+  return  isLoadingDashboardsListData ? 
   <CustomLoading />
   :(
     <>
@@ -137,31 +148,70 @@ const Home = () => {
                   {
                     gridSize: { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 },
                     element: (
+                     
                       <Stack direction="row" alignItems="center" spacing={2} justifyContent="end">
-                        <Button sx={{ mt: 0, flex: 1,justifySelf: 'start' }} variant="outlined" onClick={() => setisEditable(!isEditable)} color={isEditable ? 'error' : 'secondary'}>
+                        {
+                          (isLoadingDashboardDetailData || isLoadingDashboardsListData )? <CustomLoading /> : (
+                            <>
+                              <Button sx={{ mt: 0, flex: 1,justifySelf: 'start' }} variant="outlined" disabled={isLoadingDashboardDetailData} onClick={() => setisEditable(!isEditable)} color={isEditable ? 'error' : 'secondary'}>
                           {isEditable ? 'لغو' : 'ویرایش'}{' '}
                         </Button>
-                        <Button sx={{ mt: 0, flex: 1.5 }} variant="outlined" color="secondary" disabled={DashboardDetailData.chart_positions.length === 0|| isEditable} onClick={() => setIsSortDialogOpen(true)}>
+                        <Button sx={{ mt: 0, flex: 1.5 }} variant="outlined" color="secondary" disabled={isLoadingDashboardDetailData || DashboardDetailData?.chart_positions?.length === 0|| isEditable} onClick={() => setIsSortDialogOpen(true)}>
                           مرتب‌سازی در نمای کلی
                         </Button>
-                        <Button sx={{ mt: 0, flex: 1.5, justifySelf: 'start' }} variant="contained" color={isEditable ? 'success' : 'primary'}
+                        <Button sx={{ mt: 0, flex: 1.5, justifySelf: 'start' }} variant="contained" color={isEditable ? 'success' : 'primary'} disabled={isLoadingDashboardDetailData}
                           startIcon={isEditable ? <SolarCheckCircleBoldDuotone /> : <SolarAddCircleLineDuotone />}
                           onClick={() => { if (isEditable) {  setisEditable(false) } else {  setIsRequestOpen(true) } }}
                         >
-                          {isEditable ? 'تایید' : 'نمودار جدید'}{' '}
+                          {isEditable ? 'تایید' : 'نمودار جدید'}{''}
                         </Button>
+                            </>
+                          )
+                        }
+                      
+                       
                       </Stack>
+                      
                     ),
                   },
                 ],
               },
+              {
+                position: 'right',
+                elements: [
+                  {
+                    gridSize: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+                    element:  isLoadingDashboardsListData ? <CustomLoading /> : (
+                      <Select sx={{mt:{xs:2}}} fullWidth value={activeDashboardId} onChange={(e) => { console.log(e.target.value); setActiveDashboardId(e.target.value as string) }}>
+                        {
+                          dashboardsListData?.dashboards?.map((item) => (<MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>))
+                        }
+                      </Select>
+                      // <SelectComponent 
+                      //   control={methods.control}
+                      //   controllerName="dashboard_id"
+                      //   label="داشبورد"
+                      //   options={dashboardsListData?.dashboards || []}
+                      //   labelKey="name"
+                      //   valueKey="id"
+                      //   onSelectChange={(value) => { console.log(value?.id as string); setActiveDashboardId(value?.id as string) }}
+                      // />
+                    ),
+                  },
+                ],
+              }
             ]}
           />
-           <Grid container spacing={2} mt={2}>
+
+
+          {
+            DashboardDetailData && 
+          <>
+          <Grid container spacing={2} mt={2}>
            {DashboardDetailData?.chart_positions?.map((item) => (<SortableGridChartItem key={item.position} item={item} isEditable={isEditable} handleRemove={handleOpenDeleteChartDialog} />))}
            </Grid>
 
-
+          
           <ChartRequestDialog
             onAddToDashboard={handleAddToDashboard}
             isAddingChartToDashboard={isAddingChartToDashboard}
@@ -172,6 +222,9 @@ const Home = () => {
             control={methods.control}
             onGenerate={() => requestToCreateChart()}
           />
+          </>
+          }
+           
           <SimpleDialog
           showDialog={showDeleteChartDialog}
           setShowDialog={setShowDeleteChartDialog}
@@ -181,15 +234,19 @@ const Home = () => {
           dialogTitle='حذف نمودار'
           mainButtonTitle='حذف'
           />
-           <SortGridDialog
-            open={isSortDialogOpen}
-            items={DashboardDetailData.chart_positions.map(({ chart_id, chart_object }) => ({ id: chart_id, title: chart_object?.title, chart_type: chart_object?.chart_type as 'bar_chart' | 'line_chart' | 'pie_chart', preview: chart_object?.data }))}
-            isSorting={isUpdatingDashboard}
-            onClose={() => setIsSortDialogOpen(false)}
-            onApply={(orderedIds) => {
-              handleDashboardUpdate(orderedIds);
-            }}
-          /> 
+          {
+                DashboardDetailData && 
+                <SortGridDialog
+                open={isSortDialogOpen}
+                items={DashboardDetailData?.chart_positions?.map(({ chart_id, chart_object }) => ({ id: chart_id, title: chart_object?.title, chart_type: chart_object?.chart_type as 'bar_chart' | 'line_chart' | 'pie_chart', preview: chart_object?.data }))}
+                isSorting={isUpdatingDashboard}
+                onClose={() => setIsSortDialogOpen(false)}
+                onApply={(orderedIds) => {
+                  handleDashboardUpdate(orderedIds);
+                }}
+              />
+          }
+           
         </Box>
       </FormProvider>
     </>

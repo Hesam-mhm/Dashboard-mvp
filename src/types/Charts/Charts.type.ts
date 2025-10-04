@@ -69,14 +69,16 @@ export type ConfirmChartsResponseType = {
     chart_id?: string;
 };
 
-export type AllChartsQueryParamsType = UserScopedParams & PaginationParams;
-export type AllChartsResponseType = (Timestamped & {
+export type ChartListItemType = {
     id?: string;
     chart_type?: string;
     fields_mapping?: FieldsMapping;
     natural_query?: string;
     title?: string;
-})[];
+}
+
+export type AllChartsQueryParamsType = UserScopedParams & PaginationParams;
+export type AllChartsResponseType = ChartListItemType[];
       
 
 

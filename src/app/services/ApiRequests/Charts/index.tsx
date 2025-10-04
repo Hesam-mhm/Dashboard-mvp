@@ -5,7 +5,7 @@ import EndPoints from '../EndPoints';
 
 const getAllCharts = async (data: AllChartsQueryParamsType) => {
   const response = await chartAxiosInstance.get(EndPoints.CHARTS.getAllCharts,{params: data});
-  return response.data as AllChartsResponseType[];
+  return response.data as AllChartsResponseType;
 };
 
 const updateChart = async ( data: UpdateChartRequestType) => {

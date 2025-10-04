@@ -57,4 +57,11 @@ export const SidebarMapper: SidebarEntry[] = [
     boldIcon: <DashboardIcon />,
     roles: [Roles.SystemManager],
   },
+  // {
+  //   title: 'نمودارها',
+  //   to: RouteMapper.charts.path,
+  //   Icon: <DashboardIcon />,
+  //   boldIcon: <DashboardIcon />,
+  //   roles: [Roles.SystemManager],
+  // },
 ];

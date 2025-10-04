@@ -166,4 +166,4 @@ export type statusTextType =
 
 export type StatusColorType = 'success' | 'error' | 'secondary' | 'primary';
 
-export type StatusBoxType = { statusText: statusTextType; statusColor: StatusColorType };
+export type StatusBoxType = { statusText: string; statusColor: StatusColorType };

@@ -21,4 +21,18 @@ export const RouteMapper = {
     path: '/dashboards/dashboardDetail/:id',
     title: 'جزئیات داشبورد',
   },
+  
+  charts: {
+    path: '/Charts',
+    title: 'نمودارها',
+  },
+  CreateChart: {
+    path: '/Charts/CreateChart',
+    title: 'افزودن نمودار',
+  },
+  EditChart: {
+    path: '/Charts/EditChart/:id',
+    title: 'ویرایش نمودار',
+  },
+  
 };

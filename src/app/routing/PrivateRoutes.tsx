@@ -10,6 +10,7 @@ import DashboardBuilder from '../pages/dashboard-builder/DashboardBuilder';
 import ChartsExample from '../pages/ChartsExample/ChartsExample';
 import Dashboards from '../pages/Dashboards/Dashboards';
 import DashboardDetail from '../pages/Dashboards/DashboardDetail/DashboardDetail';
+import Charts from '../pages/Charts/Charts';
 
 // const FinancialManagerReviewAdvancePayment = lazy(
 //   () =>
@@ -49,6 +50,14 @@ const PrivateRoutes = () => {
           element={
             <Suspense fallback={<LoadingFallback />}>
               <Home />
+            </Suspense>
+          }
+        />
+        <Route
+          path={RouteMapper.charts.path}
+          element={
+            <Suspense fallback={<LoadingFallback />}>
+              <Charts />
             </Suspense>
           }
         />

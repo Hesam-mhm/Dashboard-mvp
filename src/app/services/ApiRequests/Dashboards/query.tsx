@@ -16,6 +16,7 @@ const useGetDashboardById = (data: GetDashboardByIdQueryParamType) => {
     return useQuery({
         queryKey: [queryKeys.dashboards.dashboardDetail, data.dashboard_id],
         queryFn: async () => await DashboardsApiRequests.GetDashboardById(data),
+        enabled: !!data.dashboard_id,
     });
 }
 

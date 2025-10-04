@@ -8,19 +8,25 @@ export type CreateDashboardResponseType = Timestamped & IdName & {
     chart_positions?: ChartPosition[];
 };
 
-
+export type GetDashboardByIdResponseType =  {
+    id ?: string;
+    name ?: string;
+    created_at ?: string;
+    updated_at ?: string;
+    chart_positions ?: ChartPosition[];
+};
 
 export type GetDashboardsQueryParamType = UserScopedParams & PaginationParams;
 
 export type GetDashboardsResponseType = {
-    dashboards?: CreateDashboardResponseType[];
+    dashboards?: GetDashboardByIdResponseType[];
 };
 
 export type GetDashboardByIdQueryParamType = UserScopedParams & {
     dashboard_id?: string;
 };
 
-export type GetDashboardByIdResponseType = CreateDashboardResponseType;
+
 export type UpdateDashboardRequestType = {
     dashboard_id?: string;
     data?: {
