@@ -44,7 +44,7 @@ const DashboardDetail = () => {
     const dataToSend: RequestChartType = {
       user_id: user_id,
       natural_query: methods.getValues().subject,
-      external_db_id: 6,
+      external_db_id: 5,
     };
 
     requestChart(dataToSend, {
